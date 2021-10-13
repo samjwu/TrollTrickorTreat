@@ -1,10 +1,15 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.Collections.Generic;
+
+using UnityEngine;
+
 using Random = UnityEngine.Random;
 
 namespace Completed
 {
+    /// <summary>
+    /// Sets up board tiles for the level (borders, floors, walls, items, enemies)
+    /// </summary>
     public class BoardManager : MonoBehaviour
     {
         /// <summary>
