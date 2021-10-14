@@ -21,7 +21,35 @@ namespace Completed
         }
 
         /// <summary>
-        /// Return true if move is possible (has no blockers and not already moving), else return false
+        /// Define MovingObject behavior when it hits object of generic type T
+        /// </summary>
+        protected abstract void OnCannotMove<T>(T component) where T : Component;
+
+        /// <summary>
+        /// Either successfully perform Move or pass the blocker object to OnCannotMove
+        /// </summary>
+        protected virtual void AttemptMove<T>(int xDir, int yDir) where T : Component
+        {
+            // hit will store whatever our linecast hits when Move is called
+            RaycastHit2D hit;
+            bool canMove = Move(xDir, yDir, out hit);
+
+            // if nothing was hit by linecast, move was successful
+            if (hit.transform == null)
+            {
+                return;
+            }
+
+            // object has hit some object of generic type T
+            T hitComponent = hit.transform.GetComponent<T>();
+            if (!canMove && hitComponent != null)
+            {
+                OnCannotMove(hitComponent);
+            }
+        }
+
+        /// <summary>
+        /// Return true if move is possible (has no blockers and not already moving) and perform the move, else return false
         /// </summary>
         protected bool Move(int xDir, int yDir, out RaycastHit2D hit)
         {
@@ -72,33 +100,5 @@ namespace Completed
 
             isMoving = false;
         }
-
-        /// <summary>
-        /// Either successfully perform Move or 
-        /// </summary>
-        protected virtual void AttemptMove<T>(int xDir, int yDir) where T : Component
-        {
-            // hit will store whatever our linecast hits when Move is called
-            RaycastHit2D hit;
-            bool canMove = Move(xDir, yDir, out hit);
-
-            // if nothing was hit by linecast, move was successful
-            if (hit.transform == null)
-            {
-                return;
-            }
-
-            // object has hit some object of generic type T
-            T hitComponent = hit.transform.GetComponent<T>();
-            if (!canMove && hitComponent != null)
-            {
-                OnCannotMove(hitComponent);
-            }
-        }
-
-        /// <summary>
-        /// Define MovingObject behavior when it hits object of generic type T
-        /// </summary>
-        protected abstract void OnCannotMove<T>(T component) where T : Component;
     }
 }
