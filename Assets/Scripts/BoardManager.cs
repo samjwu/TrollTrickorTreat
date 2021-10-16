@@ -43,6 +43,25 @@ namespace Completed
         private List<Vector3> randomPositions = new List<Vector3>(); // coordinates for special tiles (potential walls/items/enemies)
 
         /// <summary>
+        /// Sets up the entire board (borders, floors, walls, items, enemies)
+        /// </summary>
+        /// <param name="level"></param>
+        public void SetupScene(int level)
+        {
+            InitializeBoard();
+            InitializeRandomPositions();
+            GenerateRandomTiles(wallTiles, wallRange.minimum, wallRange.maximum);
+            GenerateRandomTiles(foodTiles, foodRange.minimum, foodRange.maximum);
+
+            // number of enemies scales logarithmically to level
+            int enemyCount = (int)Mathf.Log(level, 2f);
+            GenerateRandomTiles(enemyTiles, enemyCount, enemyCount);
+
+            // create exit
+            Instantiate(exit, new Vector3(boardColumns - 1, boardRows - 1, 0f), Quaternion.identity);
+        }
+
+        /// <summary>
         /// Generate border and floor tiles for the board
         /// </summary>
         void InitializeBoard()
@@ -115,25 +134,6 @@ namespace Completed
                 GameObject randomTile = tiles[Random.Range(0, tiles.Length)];
                 Instantiate(randomTile, randomPosition, Quaternion.identity);
             }
-        }
-
-        /// <summary>
-        /// Sets up the entire board (borders, floors, walls, items, enemies)
-        /// </summary>
-        /// <param name="level"></param>
-        public void SetupScene(int level)
-        {
-            InitializeBoard();
-            InitializeRandomPositions();
-            GenerateRandomTiles(wallTiles, wallRange.minimum, wallRange.maximum);
-            GenerateRandomTiles(foodTiles, foodRange.minimum, foodRange.maximum);
-
-            // number of enemies scales logarithmically to level
-            int enemyCount = (int)Mathf.Log(level, 2f);
-            GenerateRandomTiles(enemyTiles, enemyCount, enemyCount);
-
-            // create exit
-            Instantiate(exit, new Vector3(boardColumns - 1, boardRows - 1, 0f), Quaternion.identity);
         }
     }
 }

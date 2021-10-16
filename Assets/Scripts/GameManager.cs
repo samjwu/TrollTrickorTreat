@@ -19,7 +19,7 @@ namespace Completed
 
         private Text levelText;
         private GameObject blockerImage; // block out level as levels are being set up, background for levelText
-        private BoardManager boardScript;
+        private BoardManager boardManager;
         private int currentLevel = 1;
         private List<Enemy> enemies;
         private bool areEnemiesMoving;
@@ -40,7 +40,7 @@ namespace Completed
             // do not destroy GameManager when reloading scene
             DontDestroyOnLoad(gameObject);
             enemies = new List<Enemy>();
-            boardScript = GetComponent<BoardManager>();
+            boardManager = GetComponent<BoardManager>();
             InitGame();
         }
 
@@ -59,7 +59,6 @@ namespace Completed
             instance.currentLevel++;
             instance.InitGame();
         }
-
 
         //Initializes the game for each level.
         void InitGame()
@@ -85,9 +84,7 @@ namespace Completed
             //Clear any Enemy objects in our List to prepare for next level.
             enemies.Clear();
 
-            //Call the SetupScene function of the BoardManager script, pass it current level number.
-            boardScript.SetupScene(currentLevel);
-
+            boardManager.SetupScene(currentLevel);
         }
 
 
