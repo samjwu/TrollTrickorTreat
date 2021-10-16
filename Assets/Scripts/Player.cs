@@ -36,12 +36,15 @@ namespace Completed
         /// <summary>
         /// When Player object is disabled, store the current local food total in the GameManager so it can be re-loaded in next level
         /// </summary>
-        private void OnDisable()
+        void OnDisable()
         {
             GameManager.instance.playerFoodPoints = foodPoints;
         }
 
-        private void Update()
+        /// <summary>
+        /// Get input and try to move the player
+        /// </summary>
+        void Update()
         {
             // do nothing if it's not the player's turn
             if (!GameManager.instance.isPlayerTurn)
@@ -100,15 +103,15 @@ namespace Completed
 			}	
 #endif
 
-            //Check if we have a non-zero value for horizontal or vertical
             if (horizontalMove != 0 || verticalMove != 0)
             {
-                //Call AttemptMove passing in the generic parameter Wall, since that is what Player may interact with if they encounter one (by attacking it)
-                //Pass in horizontal and vertical as parameters to specify the direction to move Player in.
                 AttemptMove<Wall>(horizontalMove, verticalMove);
             }
         }
 
+        /// <summary>
+        /// Move the player or have player attack a blocking wall
+        /// </summary>
         protected override void AttemptMove<T>(int xDir, int yDir)
         {
             // when the player moves, the food is used up
@@ -128,109 +131,86 @@ namespace Completed
             GameManager.instance.isPlayerTurn = false;
         }
 
-
-        //OnCantMove overrides the abstract function OnCantMove in MovingObject.
-        //It takes a generic parameter T which in the case of Player is a Wall which the player can attack and destroy.
+        /// <summary>
+        /// Have player attack a wall if it is blocking
+        /// </summary>
         protected override void OnCannotMove<T>(T component)
         {
-            //Set hitWall to equal the component passed in as a parameter.
             Wall hitWall = component as Wall;
-
-            //Call the DamageWall function of the Wall we are hitting.
             hitWall.DamageWall(wallDamage);
-
-            //Set the attack trigger of the player's animation controller in order to play the player's attack animation.
             playerAnimator.SetTrigger("playerChop");
         }
 
-
-        //OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
-        private void OnTriggerEnter2D(Collider2D other)
+        /// <summary>
+        /// Logic for player interactions with items
+        /// </summary>
+        void OnTriggerEnter2D(Collider2D other)
         {
-            //Check if the tag of the trigger collided with is Exit.
+            // if player reaches exit, go to next level
             if (other.tag == "Exit")
             {
-                //Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
                 Invoke("Restart", restartLevelDelay);
 
-                //Disable the player object since level is over.
+                // disable the player object since level is over.
                 enabled = false;
             }
-
-            //Check if the tag of the trigger collided with is Food.
+            // if player reaches food, add food points
             else if (other.tag == "Food")
             {
-                //Add pointsPerFood to the players current food total.
                 foodPoints += pointsPerFood;
-
-                //Update foodText to represent current total and notify player that they gained points
                 foodText.text = "+" + pointsPerFood + " Food: " + foodPoints;
 
-                //Call the RandomizeSfx function of SoundManager and pass in two eating sounds to choose between to play the eating sound effect.
                 SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
 
-                //Disable the food object the player collided with.
+                // disable the food object the player collided with.
                 other.gameObject.SetActive(false);
             }
-
-            //Check if the tag of the trigger collided with is Soda.
+            // if player reaches soda, add soda points
             else if (other.tag == "Soda")
             {
-                //Add pointsPerSoda to players food points total
                 foodPoints += pointsPerSoda;
-
-                //Update foodText to represent current total and notify player that they gained points
                 foodText.text = "+" + pointsPerSoda + " Food: " + foodPoints;
 
-                //Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
                 SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
 
-                //Disable the soda object the player collided with.
+                // disable the soda object the player collided with.
                 other.gameObject.SetActive(false);
             }
         }
 
-
-        //Restart reloads the scene when called.
-        private void Restart()
+        /// <summary>
+        /// Reload the scene to start a new level
+        /// </summary>
+        void Restart()
         {
-            //Load the last scene loaded, in this case Main, the only scene in the game. And we load it in "Single" mode so it replace the existing one
-            //and not load all the scene object in the current scene.
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
         }
 
-
-        //LoseFood is called when an enemy attacks the player.
-        //It takes a parameter loss which specifies how many points to lose.
+        /// <summary>
+        /// Reduce player's food points by loss value
+        /// </summary>
         public void LoseFood(int loss)
         {
-            //Set the trigger for the player animator to transition to the playerHit animation.
             playerAnimator.SetTrigger("playerHit");
 
-            //Subtract lost food points from the players total.
             foodPoints -= loss;
-
-            //Update the food display with the new total.
             foodText.text = "-" + loss + " Food: " + foodPoints;
 
-            //Check to see if game has ended.
             CheckIfGameOver();
         }
 
-
-        //CheckIfGameOver checks if the player is out of food points and if so, ends the game.
-        private void CheckIfGameOver()
+        /// <summary>
+        /// End the game if player has no more food
+        /// </summary>
+        void CheckIfGameOver()
         {
-            //Check if food point total is less than or equal to zero.
             if (foodPoints <= 0)
             {
-                //Call the PlaySingle function of SoundManager and pass it the gameOverSound as the audio clip to play.
                 SoundManager.instance.PlaySingle(gameOverSound);
 
-                //Stop the background music.
+                // stop the background music.
                 SoundManager.instance.musicSource.Stop();
 
-                //Call the GameOver function of GameManager.
                 GameManager.instance.GameOver();
             }
         }
