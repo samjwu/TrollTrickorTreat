@@ -74,7 +74,7 @@ namespace Completed
         }
 
         /// <summary>
-        /// Co-routine for moving units to end position
+        /// Coroutine for moving units to end position
         /// </summary>
         protected IEnumerator SmoothMovement(Vector3 endPosition)
         {

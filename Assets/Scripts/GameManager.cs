@@ -18,12 +18,12 @@ namespace Completed
         public bool isPlayerTurn = true;
 
         private Text levelText;
-        private GameObject blockerImage; // block out level as levels are being set up, background for levelText
+        private GameObject levelImage; // image to hide levels as they are being set up, background for levelText
         private BoardManager boardManager;
         private int currentLevel = 1;
         private List<Enemy> enemies;
         private bool areEnemiesMoving;
-        private bool isBoardInSetupMode = true;
+        private bool isBoardInSetupMode = true; // if true, prevent player from moving
 
         void Awake()
         {
@@ -44,123 +44,118 @@ namespace Completed
             InitGame();
         }
 
-        //this is called only once, and the paramter tell it to be called only after the scene was loaded
-        //(otherwise, our Scene Load callback would be called the very first load, and we don't want that)
+        /// <summary>
+        /// Run the OnSceneLoaded callback function after a scene is loaded
+        /// </summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static public void CallbackInitialization()
         {
-            //register the callback to be called everytime the scene is loaded
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        //This is called each time a scene is loaded.
+        /// <summary>
+        /// Increase level counter and set up the new level
+        /// </summary>
         static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
             instance.currentLevel++;
             instance.InitGame();
         }
 
-        //Initializes the game for each level.
+        /// <summary>
+        /// Set up game for each new level
+        /// </summary>
         void InitGame()
         {
-            //While doingSetup is true the player can't move, prevent player from moving while title card is up.
+            // use isBoardInSetupMode to prevent player from moving in loading mode
             isBoardInSetupMode = true;
 
-            //Get a reference to our image LevelImage by finding it by name.
-            blockerImage = GameObject.Find("LevelImage");
-
-            //Get a reference to our text LevelText's text component by finding it by name and calling GetComponent.
+            levelImage = GameObject.Find("LevelImage");
             levelText = GameObject.Find("LevelText").GetComponent<Text>();
-
-            //Set the text of levelText to the string "Day" and append the current level number.
             levelText.text = "Day " + currentLevel;
+            levelImage.SetActive(true);
 
-            //Set levelImage to active blocking player's view of the game board during setup.
-            blockerImage.SetActive(true);
-
-            //Call the HideLevelImage function with a delay in seconds of levelStartDelay.
             Invoke("HideLevelImage", levelStartDelay);
 
-            //Clear any Enemy objects in our List to prepare for next level.
             enemies.Clear();
 
             boardManager.SetupScene(currentLevel);
         }
 
-
-        //Hides black image used between levels
+        /// <summary>
+        /// Remove the level hiding image from view
+        /// </summary>
         void HideLevelImage()
         {
-            //Disable the levelImage gameObject.
-            blockerImage.SetActive(false);
+            levelImage.SetActive(false);
 
-            //Set doingSetup to false allowing player to move again.
+            // allow player to move again
             isBoardInSetupMode = false;
         }
 
-        //Update is called every frame.
+        /// <summary>
+        /// Logic to handle the enemy movement
+        /// </summary>
         void Update()
         {
-            //Check that playersTurn or enemiesMoving or doingSetup are not currently true.
+            // do not move enemies on player's turn, if enemies are already moving, or if in setup mode
             if (isPlayerTurn || areEnemiesMoving || isBoardInSetupMode)
-
-                //If any of these are true, return and do not start MoveEnemies.
+            {
                 return;
+            }
 
-            //Start moving enemies.
             StartCoroutine(MoveEnemies());
         }
 
-        //Call this to add the passed in Enemy to the List of Enemy objects.
+        /// <summary>
+        /// Add an enemy to the list of tracked enemies
+        /// </summary>
+        /// <param name="script"></param>
         public void AddEnemyToList(Enemy script)
         {
-            //Add Enemy to List enemies.
             enemies.Add(script);
         }
 
-
-        //GameOver is called when the player reaches 0 food points
+        /// <summary>
+        /// End the game when player has no food
+        /// </summary>
         public void GameOver()
         {
-            //Set levelText to display number of levels passed and game over message
             levelText.text = "After " + currentLevel + " days, you starved.";
 
-            //Enable black background image gameObject.
-            blockerImage.SetActive(true);
+            levelImage.SetActive(true);
 
             //Disable this GameManager.
             enabled = false;
         }
 
-        //Coroutine to move enemies in sequence.
+        /// <summary>
+        /// Coroutine for moving enemies logic
+        /// </summary>
         IEnumerator MoveEnemies()
         {
-            //While enemiesMoving is true player is unable to move.
+            // player cannot move while enemies move
             areEnemiesMoving = true;
 
-            //Wait for turnDelay seconds, defaults to .1 (100 ms).
+            // wait for turnDelay seconds
             yield return new WaitForSeconds(turnDelay);
 
-            //If there are no enemies spawned (IE in first level):
+            // even if there no enemies, perform a wait to simulate delay when there are enemies
             if (enemies.Count == 0)
             {
-                //Wait for turnDelay seconds between moves, replaces delay caused by enemies moving when there are none.
                 yield return new WaitForSeconds(turnDelay);
             }
 
-            //Loop through List of Enemy objects.
             for (int i = 0; i < enemies.Count; i++)
             {
-                //Call the MoveEnemy function of Enemy at index i in the enemies List.
                 enemies[i].MoveEnemy();
-
-                //Wait for Enemy's moveTime before moving next Enemy, 
+                // wait for enemy's moveTime before moving the next enemy
                 yield return new WaitForSeconds(enemies[i].moveTime);
             }
-            //Once Enemies are done moving, set playersTurn to true so player can move.
+
+            // after enemies finish moving, allow player to move
             isPlayerTurn = true;
 
-            //Enemies are done moving, set enemiesMoving to false.
             areEnemiesMoving = false;
         }
     }
