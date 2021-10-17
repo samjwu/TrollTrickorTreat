@@ -138,7 +138,7 @@ namespace Completed
         {
             Wall hitWall = component as Wall;
             hitWall.DamageWall(wallDamage);
-            playerAnimator.SetTrigger("playerChop");
+            playerAnimator.SetTrigger("playerAttack");
         }
 
         /// <summary>

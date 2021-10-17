@@ -72,7 +72,7 @@ namespace Completed
 
             levelImage = GameObject.Find("LevelImage");
             levelText = GameObject.Find("LevelText").GetComponent<Text>();
-            levelText.text = "Day " + currentLevel;
+            levelText.text = "Block " + currentLevel;
             levelImage.SetActive(true);
 
             Invoke("HideLevelImage", levelStartDelay);
@@ -121,7 +121,7 @@ namespace Completed
         /// </summary>
         public void GameOver()
         {
-            levelText.text = "After " + currentLevel + " days, you starved.";
+            levelText.text = "After travelling " + currentLevel + " blocks, you starved.";
 
             levelImage.SetActive(true);
 
