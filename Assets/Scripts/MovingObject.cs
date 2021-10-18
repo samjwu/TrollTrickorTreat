@@ -12,7 +12,6 @@ namespace Completed
         private BoxCollider2D boxCollider;
         private Rigidbody2D rigidBody;
         private float inverseMoveTime; // use reciprocal of moveTime for multiplication over division for efficiency
-        private bool isMoving;
 
         protected virtual void Start()
         {
@@ -64,7 +63,7 @@ namespace Completed
             // re-enable boxCollider after linecast
             boxCollider.enabled = true;
 
-            if (hit.transform == null && !isMoving)
+            if (hit.transform == null)
             {
                 StartCoroutine(SmoothMovement(endPosition));
                 return true;
@@ -78,8 +77,6 @@ namespace Completed
         /// </summary>
         protected IEnumerator SmoothMovement(Vector3 endPosition)
         {
-            isMoving = true;
-
             // use square distance for efficiency
             float squareDistance = (transform.position - endPosition).sqrMagnitude;
 
@@ -98,8 +95,6 @@ namespace Completed
 
             // ensure the object is exactly at the end of its movement
             rigidBody.MovePosition(endPosition);
-
-            isMoving = false;
         }
     }
 }
