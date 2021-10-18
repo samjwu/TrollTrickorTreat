@@ -92,9 +92,6 @@ namespace Completed
                 // return and loop until distance is close enough to zero to end the function
                 yield return null;
             }
-
-            // ensure the object is exactly at the end of its movement
-            rigidBody.MovePosition(endPosition);
         }
     }
 }

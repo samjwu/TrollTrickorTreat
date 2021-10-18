@@ -121,7 +121,7 @@ namespace Completed
         /// </summary>
         public void GameOver()
         {
-            levelText.text = "After travelling " + currentLevel + " blocks, you starved.";
+            levelText.text = $"You starved\nafter travelling\n\n{currentLevel} blocks";
 
             levelImage.SetActive(true);
 

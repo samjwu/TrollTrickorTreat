@@ -123,7 +123,6 @@ namespace Completed
             RaycastHit2D hit;
             if (Move(xDir, yDir, out hit))
             {
-                Debug.Log("play move sound");
                 SoundManager.instance.RandomizeSfx(moveSound1, moveSound2);
             }
 
