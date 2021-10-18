@@ -123,6 +123,7 @@ namespace Completed
             RaycastHit2D hit;
             if (Move(xDir, yDir, out hit))
             {
+                Debug.Log("play move sound");
                 SoundManager.instance.RandomizeSfx(moveSound1, moveSound2);
             }
 
@@ -151,7 +152,7 @@ namespace Completed
             {
                 Invoke("Restart", restartLevelDelay);
 
-                // disable the player object since level is over.
+                // disable the player object since level is over
                 enabled = false;
             }
             // if player reaches food, add food points
@@ -162,7 +163,7 @@ namespace Completed
 
                 SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
 
-                // disable the food object the player collided with.
+                // disable the food object the player collided with
                 other.gameObject.SetActive(false);
             }
             // if player reaches soda, add soda points
@@ -173,7 +174,7 @@ namespace Completed
 
                 SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
 
-                // disable the soda object the player collided with.
+                // disable the soda object the player collided with
                 other.gameObject.SetActive(false);
             }
         }
@@ -208,7 +209,7 @@ namespace Completed
             {
                 SoundManager.instance.PlaySingle(gameOverSound);
 
-                // stop the background music.
+                // stop the background music
                 SoundManager.instance.musicSource.Stop();
 
                 GameManager.instance.GameOver();
