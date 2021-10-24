@@ -122,16 +122,18 @@ namespace Completed
         {
             // when the player moves, the food is used up
             foodPoints--;
-            foodText.text = "Candy: " + foodPoints;
-            paperText.text = "Toilet Paper: " + paperCount;
 
             base.AttemptMove<T>(xDir, yDir);
 
             RaycastHit2D hit;
+
             if (Move(xDir, yDir, out hit))
             {
                 SoundManager.instance.RandomizeSfx(moveSound1, moveSound2);
             }
+
+            foodText.text = "Candy: " + foodPoints;
+            paperText.text = "Toilet Paper: " + paperCount;
 
             CheckIfGameOver();
 
