@@ -9,6 +9,7 @@ namespace Completed
         public float restartLevelDelay = 1f; // delay time in seconds to restart level
         public int pointsPerFood = 10;
         public int pointsPerSoda = 20;
+        public int pointsPerHouse = 100;
         public int wallDamage = 1; // damage to wall per attack
         public Text foodText;
         public Text paperText;
@@ -43,6 +44,7 @@ namespace Completed
         void OnDisable()
         {
             GameManager.instance.playerFoodPoints = foodPoints;
+            GameManager.instance.playerPaperCount = paperCount;
         }
 
         /// <summary>
@@ -179,6 +181,21 @@ namespace Completed
 
                 // disable the object the player collided with
                 other.gameObject.SetActive(false);
+            }
+            else if (other.tag == "House")
+            {
+                if (paperCount > 0)
+                {
+                    paperCount--;
+                    paperText.text = "-1 Toilet Paper: " + paperCount;
+
+                    foodPoints += pointsPerHouse;
+                    foodText.text = "+" + pointsPerHouse + " Candy: " + foodPoints;
+
+                    SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
+
+                    other.gameObject.SetActive(false);
+                }
             }
         }
 
