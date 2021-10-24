@@ -192,9 +192,11 @@ namespace Completed
                     foodPoints += pointsPerHouse;
                     foodText.text = "+" + pointsPerHouse + " Candy: " + foodPoints;
 
-                    SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
+                    House hitHouse = other.gameObject.GetComponent<House>();
+                    hitHouse.DamageHouse();
+                    playerAnimator.SetTrigger("playerAttack");
 
-                    other.gameObject.SetActive(false);
+                    other.tag = "Untagged";
                 }
             }
         }
