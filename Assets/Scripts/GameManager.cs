@@ -15,13 +15,13 @@ namespace Completed
         public float turnDelay = 0.1f; // delay between each Player turn in seconds
         public int playerFoodPoints = 100;
         public int playerPaperCount = 3;
+        public int currentLevel = 1;
         [HideInInspector]
         public bool isPlayerTurn = true;
 
         private Text levelText;
         private GameObject levelImage; // image to hide levels as they are being set up, background for levelText
         private BoardManager boardManager;
-        private int currentLevel = 1;
         private List<Enemy> enemies;
         private bool areEnemiesMoving;
         private bool isBoardInSetupMode = true; // if true, prevent player from moving

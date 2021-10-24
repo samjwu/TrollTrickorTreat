@@ -63,7 +63,7 @@ namespace Completed
         protected override void OnCannotMove<T>(T component)
         {
             Player hitPlayer = component as Player;
-            hitPlayer.LoseFood(playerDamage);
+            hitPlayer.LoseFood(playerDamage + GameManager.instance.currentLevel - 1);
             enemyAnimator.SetTrigger("enemyAttack");
             SoundManager.instance.RandomizeSfx(attackSound1, attackSound2);
         }
