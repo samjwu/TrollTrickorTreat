@@ -14,6 +14,7 @@ namespace Completed
         public float levelStartDelay = 2f; // time to wait before starting level in seconds
         public float turnDelay = 0.1f; // delay between each Player turn in seconds
         public int playerFoodPoints = 100;
+        public int playerPaperCount = 3;
         [HideInInspector]
         public bool isPlayerTurn = true;
 

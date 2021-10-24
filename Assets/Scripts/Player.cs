@@ -11,6 +11,7 @@ namespace Completed
         public int pointsPerSoda = 20;
         public int wallDamage = 1; // damage to wall per attack
         public Text foodText;
+        public Text paperText;
         public AudioClip moveSound1;
         public AudioClip moveSound2;
         public AudioClip eatSound1;
@@ -21,6 +22,7 @@ namespace Completed
 
         private Animator playerAnimator;
         private int foodPoints;
+        private int paperCount;
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	// store location of screen touch origin for mobile controls
 #endif
@@ -29,7 +31,9 @@ namespace Completed
         {
             playerAnimator = GetComponent<Animator>();
             foodPoints = GameManager.instance.playerFoodPoints;
-            foodText.text = "Food: " + foodPoints;
+            foodText.text = "Candy: " + foodPoints;
+            paperCount = GameManager.instance.playerPaperCount;
+            paperText.text = "Toilet Paper: " + paperCount;
             base.Start();
         }
 
@@ -116,7 +120,8 @@ namespace Completed
         {
             // when the player moves, the food is used up
             foodPoints--;
-            foodText.text = "Food: " + foodPoints;
+            foodText.text = "Candy: " + foodPoints;
+            paperText.text = "Toilet Paper: " + paperCount;
 
             base.AttemptMove<T>(xDir, yDir);
 
@@ -154,26 +159,25 @@ namespace Completed
                 // disable the player object since level is over
                 enabled = false;
             }
-            // if player reaches food, add food points
-            else if (other.tag == "Food")
+            // if player reaches candy, add food points
+            else if (other.tag == "Candy")
             {
                 foodPoints += pointsPerFood;
-                foodText.text = "+" + pointsPerFood + " Food: " + foodPoints;
+                foodText.text = "+" + pointsPerFood + " Candy: " + foodPoints;
 
                 SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
 
-                // disable the food object the player collided with
+                // disable the object the player collided with
                 other.gameObject.SetActive(false);
             }
-            // if player reaches soda, add soda points
-            else if (other.tag == "Soda")
+            else if (other.tag == "Toilet Paper")
             {
-                foodPoints += pointsPerSoda;
-                foodText.text = "+" + pointsPerSoda + " Food: " + foodPoints;
+                paperCount++;
+                paperText.text = "+1 Toilet Paper: " + paperCount;
 
                 SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
 
-                // disable the soda object the player collided with
+                // disable the object the player collided with
                 other.gameObject.SetActive(false);
             }
         }
