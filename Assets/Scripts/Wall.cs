@@ -7,7 +7,7 @@ namespace Completed
         public AudioClip playerAttackSound1;
         public AudioClip playerAttackSound2;
         public Sprite damagedImage;
-        public int hp = 3; // wall hitpoints/health points
+        public int hp = 2; // wall hitpoints/health points
 
         private SpriteRenderer spriteRenderer;
 
