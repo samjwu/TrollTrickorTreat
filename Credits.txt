@@ -1,3 +1,18 @@
+Background Music
+https://www.newgrounds.com/audio/listen/1085589
+
+Character and Background Art
+https://assetstore.unity.com/packages/templates/tutorials/2d-roguelike-29825
+
+Environment Art
+https://opengameart.org/content/dungeon-crawl-32x32-tiles
+
+Candy Art
+http://pixelartmaker.com/art/11c58cce7a41f28
+
+Toilet Paper Art
+http://pixelartmaker.com/art/b6180e16e66c589
+
 Troll Face Art
 https://www.seekpng.com/ipng/u2w7u2q8y3i1i1a9_cry-face-meme-pixel-art-minecraft/
 https://www.vhv.rs/viewpic/hihwm_troll-face-pixel-png-transparent-png/
@@ -6,12 +21,3 @@ https://www.vhv.rs/viewpic/hJJiRiw_troll-face-pixel-art-hd-png-download/
 
 House Art
 https://opengameart.org/content/object-icons-approx-20px
-
-Candy Art
-http://pixelartmaker.com/art/11c58cce7a41f28
-
-Toilet Paper Art
-http://pixelartmaker.com/art/b6180e16e66c589
-
-Environment Art
-https://opengameart.org/content/dungeon-crawl-32x32-tiles
