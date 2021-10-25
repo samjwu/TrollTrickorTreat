@@ -61,7 +61,7 @@ namespace Completed
             int horizontalMove = 0;
             int verticalMove = 0;
 
-#if UNITY_STANDALONE || UNITY_WEBPLAYER
+#if UNITY_STANDALONE || UNITY_WEBGL
             horizontalMove = (int)Input.GetAxisRaw("Horizontal");
             verticalMove = (int)Input.GetAxisRaw("Vertical");
 
